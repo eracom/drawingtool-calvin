@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Projet perso</title>
+  </head>
+
+  <style media="screen">
+
+    body {
+      margin: 0;
+    }
+
+  </style>
+
+  <body>
+
+    <div id="controls">
+      <input id="sizeRange" type="range" value="1" min="1" max="100">
+      <select id="colorPicker">
+        <option value="blue" selected="selected">Blue</option>
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+        <option value="yellow">Yellow</option>
+        <option value="black">Black</option>
+      </select>
+      <button id="resetButton">Reset</button>
+      <a id="downloadLink" download="dessin.png">Download</a>
+    </div>
+
+    <script type="text/javascript">
+
+      var canvas,
+          context,
+          size,
+          color,
+          mouse = {x: 0, y: 0};
+
+      function draw() {
+        var input = document.getElementById('sizeRange'),
+            colorPicker = document.getElementById('colorPicker'),
+            resetButton = document.getElementById('resetButton'),
+            downloadLink = document.getElementById('downloadLink');
+
+        color = colorPicker.value;
+        size = input.value;
+
+        resetButton.addEventListener('click', function() {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        downloadLink.addEventListener('click', function() {
+          var img = canvas.toDataURL('image/png');
+          downloadLink.href = img;
+        });
+
+        input.addEventListener('input', function() {
+          size = input.value;
+          console.log(size);
+        });
+
+        colorPicker.addEventListener('change', function() {
+          color = colorPicker.value;
+          console.log(color);
+        });
+
+        canvas = document.createElement('canvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.style.cursor = 'crosshair';
+
+        context = canvas.getContext('2d');
+        context.strokeStyle = 'rgb(255,255,255)';
+        context.shadowColor = color;
+        context.lineWidth = size;
+        context.shadowWidth = 30;
+        context.lineJoin = context.lineCap = 'round';
+        context.shadowJoin = context.shadowCap = 'round';
+        context.shadowBlur = 10;
+        context.fillStyle = 'white';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        canvas.addEventListener('mousedown', onMouseDown, false);
+        canvas.addEventListener('mouseup', onMouseUp, false);
+        document.body.appendChild(canvas);
+      }
+
+      function onMouseDown(event) {
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+        document.addEventListener('mousemove', onMouseMove, false);
+      }
+
+      function onMouseMove(event) {
+        context.shadowColor = color;
+        context.lineWidth = size;
+        context.beginPath();
+        context.moveTo( mouse.x, mouse.y );
+        context.lineTo( event.clientX, event.clientY );
+        context.stroke();
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+      }
+
+      function onMouseUp(event) {
+        document.removeEventListener('mousemove', onMouseMove, false);
+      }
+
+      draw();
+
+    </script>
+
+  </body>
+</html>
