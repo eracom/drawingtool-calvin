@@ -1,6 +1,6 @@
 # Drawing Tool
 
-https://code.eracom.ch/drawingtool-calvin/
+https://eracom.github.io/drawingtool-calvin/
 
 Drawing Tool by [Calvin Herizo](https://www.linkedin.com/in/calvin-herizo-556039102/)
 
